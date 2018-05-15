@@ -1,0 +1,111 @@
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-auth.js"></script>
+
+<script>
+    var config = {
+        apiKey: "AIzaSyB6Wt1ngl5t9Oo4XK0gp4r5iFHk2hORneE",
+        authDomain: "keyfold-37e3a.firebaseapp.com",
+        databaseURL: "https://keyfold-37e3a.firebaseio.com",
+        projectId: "keyfold-37e3a",
+        storageBucket: "keyfold-37e3a.appspot.com",
+        messagingSenderId: "637019872359"
+    };
+    firebase.initializeApp(config);
+</script>
+
+<script>
+    var refreshCustomerClaims = 'https://us-central1-keyfold-37e3a.cloudfunctions.net/refreshCustomerClaims';
+
+
+    function refreshClaims() {
+        firebase.auth().currentUser.getIdToken()
+            .then((idToken) => {
+                console.log(idToken);
+                fetch(refreshCustomerClaims, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "idToken": idToken,
+                    })
+                })
+                    .then(function (response) {
+                        console.log("Response from claims request: " + response);
+                        firebase.auth().currentUser.getIdToken(true);
+                        console.log("Refreshed Id Token.");
+                        showClaims();
+                    })
+                    .catch(function (error) {
+                        console.log("Error posting data: " + error);
+                    })
+
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
+
+    function showClaims() {
+        firebase.auth().currentUser.getIdToken(true)
+            .then((idToken) => {
+                const payload = JSON.parse(atob(idToken.split('.')[1]));
+                console.log(payload);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    function handleError(triggerId, errorBlockId, errorMessage) {
+        var errorTrigger = document.getElementById(triggerId);
+        var errorBlock = document.getElementById(errorBlockId);
+        errorBlock.innerHTML = errorMessage;
+        errorTrigger.click();
+    }
+</script>
+
+<script>
+    var refreshClaims = 'https://us-central1-keyfold-37e3a.cloudfunctions.net/refreshCustomerClaims';
+
+
+    function refreshClaims() {
+        firebase.auth().currentUser.getIdToken()
+            .then((idToken) => {
+                console.log(idToken);
+                fetch(refreshCustomerClaims, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "idToken": idToken,
+                    })
+                })
+                    .then(function (response) {
+                        console.log("Response from claims request: " + response);
+                        firebase.auth().currentUser.getIdToken(true);
+                        console.log("Refreshed Id Token.");
+                        showClaims();
+                    })
+                    .catch(function (error) {
+                        console.log("Error posting data: " + error);
+                    })
+
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
+
+    function showClaims() {
+        firebase.auth().currentUser.getIdToken(true)
+            .then((idToken) => {
+                const payload = JSON.parse(atob(idToken.split('.')[1]));
+                console.log(payload);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    function handleError(triggerId, errorBlockId, errorMessage) {
+        var errorTrigger = document.getElementById(triggerId);
+        var errorBlock = document.getElementById(errorBlockId);
+        errorBlock.innerHTML = errorMessage;
+        errorTrigger.click();
+    }
+</script>
